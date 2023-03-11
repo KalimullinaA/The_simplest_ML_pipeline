@@ -4,11 +4,11 @@ import pandas as pd
 import seaborn as sns; sns.set()
 from sklearn.preprocessing import MinMaxScaler
 sns.set() # библиотека Seaborn для визуализации данных из Pandas
+import os
 
 
-
-data_train = pd.read_csv('data_train.csv')
-data_test = pd.read_csv('data_test.csv')
+data_train = pd.read_csv('train/data_train.csv')
+data_test = pd.read_csv('test/data_test.csv')
 
 DF_full = pd.concat([data_train, data_test]) # объединить DF_train и DF_test в один ДатаФрейм
 
@@ -48,17 +48,18 @@ print(type(y_train))
 print(y_train)
 
 X_test = test.drop([i for i in cat_columns if i in ['Job Title']], axis=1)
-# y_test = data_train['Salary'].values
 
 
 
-scaler = MinMaxScaler()
-scaler.fit_transform(X_train)
-scaler.fit_transform(X_test)
-X_train = scaler.transform(X_train)
-X_test = scaler.transform(X_test)
+# scaler = MinMaxScaler()
+# scaler.fit_transform(X_train)
+# scaler.fit_transform(X_test)
+# X_train = scaler.transform(X_train)
+# X_test = scaler.transform(X_test)
 
-
+X_test[X_test.columns.tolist()].to_csv('data_test.csv', index = False)
+os.replace('data_test.csv','test/data_test.csv')
+print(X_test.columns.tolist ())
 model = LogisticRegression(max_iter=100).fit(X_train, y_train)
 
 pickle.dump(model, open('model.pkl', 'wb'))
