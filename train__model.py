@@ -47,12 +47,16 @@ y_train = data_train['Salary'].values
 print(type(y_train))
 print(y_train)
 
+X_test = test.drop([i for i in cat_columns if i in ['Job Title']], axis=1)
+# y_test = data_train['Salary'].values
+
 
 
 scaler = MinMaxScaler()
 scaler.fit_transform(X_train)
+scaler.fit_transform(X_test)
 X_train = scaler.transform(X_train)
-
+X_test = scaler.transform(X_test)
 
 
 model = LogisticRegression(max_iter=100).fit(X_train, y_train)
