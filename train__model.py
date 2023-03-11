@@ -1,9 +1,6 @@
 from sklearn.linear_model import LogisticRegression
 import pickle
 import pandas as pd
-import seaborn as sns; sns.set()
-from sklearn.preprocessing import MinMaxScaler
-sns.set() # библиотека Seaborn для визуализации данных из Pandas
 import os
 
 
@@ -29,37 +26,21 @@ DF_ohe = pd.get_dummies(DF_full[cat_columns]) # One-hot кодирование �
 DF_full = DF_full.join(DF_ohe)
 DF_full.drop(columns=['Education Level'], inplace=True)
 DF_full['Salary'] = DF_full['Salary'].fillna(DF_full.Salary.mean())
-# DF_full.drop_duplicates()
-print(DF_full)
 
-
-print(DF_full)
 
 train = DF_full.iloc[0:data_train.shape[0],:] # Разбиваем данные на Тренировочную и Тестовую 0-300,:
 test = DF_full.iloc[data_train.shape[0]:,:]#300-end
-print(train)
-print(test)
-X_train = train.drop([i for i in cat_columns if i in ['Job Title']], axis=1)
 
-print(type(X_train))
-print(X_train)
+
+X_train = train.drop([i for i in cat_columns if i in ['Job Title']], axis=1)
 y_train = data_train['Salary'].values
-print(type(y_train))
-print(y_train)
 
 X_test = test.drop([i for i in cat_columns if i in ['Job Title']], axis=1)
 
 
-
-# scaler = MinMaxScaler()
-# scaler.fit_transform(X_train)
-# scaler.fit_transform(X_test)
-# X_train = scaler.transform(X_train)
-# X_test = scaler.transform(X_test)
-
 X_test[X_test.columns.tolist()].to_csv('data_test.csv', index = False)
 os.replace('data_test.csv','test/data_test.csv')
-print(X_test.columns.tolist ())
 model = LogisticRegression(max_iter=100).fit(X_train, y_train)
+
 
 pickle.dump(model, open('model.pkl', 'wb'))

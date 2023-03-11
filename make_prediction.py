@@ -1,8 +1,5 @@
 import pickle
-
 import pandas as pd
-
-# from train__model import X_test
 
 
 load_model = pickle.load(open('model.pkl', 'rb'))
