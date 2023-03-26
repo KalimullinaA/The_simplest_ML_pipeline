@@ -3,9 +3,9 @@ pipeline {
     stages {
         stage('Preparations') {
             steps {
-                sh 'pip install gdown'
-                sh 'pip install scikit-learn'
-                sh 'pip install pandas'
+                sh 'pip3 install gdown'
+                sh 'pip3 install scikit-learn'
+                sh 'pip3 install pandas'
                 }
         }
         stage('create_Dataset') {
