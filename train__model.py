@@ -1,46 +1,36 @@
-from sklearn.linear_model import LogisticRegression
-import pickle
+
 import pandas as pd
-import os
 
 
-data_train = pd.read_csv('train/data_train.csv')
-data_test = pd.read_csv('test/data_test.csv')
+df_train = pd.read_csv('train/X_train.csv', index_col=0)
+df_test = pd.read_csv('test/X_test.csv', index_col=0)
+#Объединяем датафреймы
+df_total = pd.concat([df_train, df_test])
 
-DF_full = pd.concat([data_train, data_test]) # объединить DF_train и DF_test в один ДатаФрейм
 
-
-DF_full.drop('Job Title', axis=1, inplace=True)
-
+#Делим столбцы на категориальные и числовые
 cat_columns = []
 num_columns = []
-for column_name in DF_full.columns:
-    if (DF_full[column_name].dtypes == object): # проверяем тип данных для каждой колонки
-        cat_columns +=[column_name] # если тип объект - то складываем в категориальные данные
+for column_name in df_total.columns:
+    if (df_total[column_name].dtypes == object):
+        cat_columns +=[column_name]
     else:
-        num_columns +=[column_name] # иначе - числовые
-print('Категориальные данные:\t ', cat_columns, '\n Число столблцов = ',len(cat_columns))
-print('Числовые данные:\t ',  num_columns, '\n Число столблцов = ',len(num_columns))
-
-DF_ohe = pd.get_dummies(DF_full[cat_columns]) # One-hot кодирование многозначных признаков
-DF_full = DF_full.join(DF_ohe)
-DF_full.drop(columns=['Education Level'], inplace=True)
-DF_full['Salary'] = DF_full['Salary'].fillna(DF_full.Salary.mean())
+        num_columns +=[column_name]
 
 
-train = DF_full.iloc[0:data_train.shape[0],:] # Разбиваем данные на Тренировочную и Тестовую 0-300,:
-test = DF_full.iloc[data_train.shape[0]:,:]#300-end
+#Применение One-hot encoding
+ohe_cat_col = pd.get_dummies(df_total[cat_columns])
+df_total = df_total.join(ohe_cat_col)
+df_total.drop(columns=['Job Title'], inplace=True)
 
 
-X_train = train.drop([i for i in cat_columns if i in ['Job Title']], axis=1)
-y_train = data_train['Salary'].values
-
-X_test = test.drop([i for i in cat_columns if i in ['Job Title']], axis=1)
-
-
-X_test[X_test.columns.tolist()].to_csv('data_test.csv', index = False)
-os.replace('data_test.csv','test/data_test.csv')
-model = LogisticRegression(max_iter=100).fit(X_train, y_train)
+#Разделение обратно на тренировочную и тестовую выборки
+X_train = df_total.iloc[0:df_train.shape[0],:]
+X_test = df_total.iloc[df_train.shape[0]:,:]
 
 
-pickle.dump(model, open('model.pkl', 'wb'))
+#Сохранение файлов
+X_train.to_csv('train/X_train.csv', index=False)
+X_test.to_csv('test/X_test.csv', index=False)
+
+

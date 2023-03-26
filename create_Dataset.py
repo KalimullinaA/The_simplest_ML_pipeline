@@ -19,8 +19,8 @@ dataframe = pd.read_csv('Data/Salary Data.csv', delimiter = ',', index_col = 0)
 
 #делим данные на тренировочные и тестовые
 X_train, X_test, Y_train, Y_test = train_test_split(
-    dataframe[['Gender', 'Education Level', 'Job Title', 'Years of Experience']],
-    dataframe[['Salary']],
+    dataframe[['Gender', 'Education Level', 'Job Title', 'Years of Experience','Salary']],
+    dataframe[['Years of Experience']],
     test_size = 0.20,
     random_state = 42
 )
