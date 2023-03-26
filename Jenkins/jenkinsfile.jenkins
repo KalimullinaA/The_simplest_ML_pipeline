@@ -1,11 +1,11 @@
 pipeline {
     agent any
-    stages {
+    stages {        
         stage('Preparations') {
             steps {
-                sh 'pip install gdown'
-                sh 'pip install scikit-learn'
-                sh 'pip install pandas'
+                sh 'python3 -m pip install gdown'
+                sh 'python3 -m pip install scikit-learn'
+                sh 'python3 -m pip install pandas'
                 }
         }
         stage('create_Dataset') {
@@ -15,7 +15,7 @@ pipeline {
         }
         stage('train__model') {
             steps{
-                sh 'python3 train_model.py'
+                sh 'python3 train__model.py'
             }
         }
         stage('make_prediction'){
