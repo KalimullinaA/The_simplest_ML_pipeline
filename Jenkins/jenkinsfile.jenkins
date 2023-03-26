@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {        
-    stage('Preparations') {
+        stage('Preparations') {
             steps {
                 sh 'python3 -m pip install gdown'
                 sh 'python3 -m pip install scikit-learn'
