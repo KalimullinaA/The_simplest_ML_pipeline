@@ -1,0 +1,17 @@
+#!groovy
+pipeline {
+    agent {
+        label 'main'
+        }
+    options {
+    buildDiscarder((logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
+    timestamps()
+    }
+    stages {
+        stage("first step") {
+            steps {
+            sh 'ssh root@10.0.2.15 \'hostname\''
+            }
+        }
+    }
+}
