@@ -1,13 +1,6 @@
 pipeline {
     agent any
     stages {
-        stage('Preparations') {
-            steps {
-                sh 'pip3 install gdown'
-                sh 'pip3 install scikit-learn'
-                sh 'pip3 install pandas'
-                }
-        }
         stage('create_Dataset') {
             steps {
                 sh 'python3 create_Dataset.py'
