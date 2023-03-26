@@ -1,30 +1,32 @@
-#!groovy
 pipeline {
-    agent {
-        label 'main'
-        }
-    options {
-        buildDiscarder((logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
-        timestamps()
-    }
+    agent any
     stages {
-        stage("create_Dataset") {
+        stage('Preparations') {
             steps {
-            sh 'ssh root@10.0.2.15'
-            }
-        stage ("train__model") {
+                sh 'pip install gdown'
+                sh 'pip install scikit-learn'
+                sh 'pip install pandas'
+                }
+        }
+        stage('create_Dataset') {
             steps {
-            sh 'ssh root@10.0.2.15'
-            }
-        stage ("make_prediction") {
-            steps {
-            sh 'ssh root@10.0.2.15'
-            }
-        stage ("test") {
-            steps {
-            sh 'ssh root@10.0.2.15'
+                sh 'python3 create_Dataset.py'
             }
         }
+        stage('train__model') {
+            steps{
+                sh 'python3 train_model.py'
+            }
+        }
+        stage('make_prediction'){
+            steps{
+                sh 'python3 make_prediction.py'
+            }
+        }
+        stage('test') {
+            steps{
+                sh 'python3 test.py'
+            }
         }
     }
 }
