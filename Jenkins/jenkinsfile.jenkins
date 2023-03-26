@@ -15,7 +15,7 @@ pipeline {
         }
         stage('train__model') {
             steps{
-                sh 'python3 train_model.py'
+                sh 'python3 train__model.py'
             }
         }
         stage('make_prediction'){
