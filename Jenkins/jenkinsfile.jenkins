@@ -8,10 +8,23 @@ pipeline {
     timestamps()
     }
     stages {
-        stage("first step") {
+        stage("create_Dataset") {
             steps {
-            sh 'ssh root@10.0.2.15 \'hostname\''
+            sh 'ssh root@10.0.2.15'
             }
+        stage ("train__model") {
+            steps {
+            sh 'ssh root@10.0.2.15'
+            }
+        stage ("make_prediction") {
+            steps {
+            sh 'ssh root@10.0.2.15'
+            }
+        stage ("test") {
+            steps {
+            sh 'ssh root@10.0.2.15'
+            }
+        }
         }
     }
 }
