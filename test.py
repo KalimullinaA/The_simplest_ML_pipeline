@@ -1,23 +1,10 @@
 import pandas as pd
 import pickle
-from sklearn.metrics import mean_squared_error
-import os
+from sklearn.metrics import f1_score
 
-# Загружаем модель машинного обучения из файла
-filename = 'model.pkl'
-with open(filename, 'rb') as file:
-    model = pickle.load(file)
 
-# Проверяем точность модели на данных из папки "test"
-test_data = []
-for file in os.listdir('test'):
-    if file.endswith('.csv'):
-        data = pd.read_csv(f'test/{file}')
-        X = data[["Age","Gender","Years of Experience","Salary","Education Level_Bachelor's","Education Level_Master's","Education Level_PhD"]]
-        y = data['Salary']
-        y_pred = model.predict(X)
-        mse = mean_squared_error(y, y_pred)
-        test_data.append((file, mse))
-print('Test data:')
-for data in test_data:
-    print(f'{data[0]} - MSE: {data[1]}')
+LogReg = pickle.load(open('model.pkl', 'rb'))
+X_test = pd.read_csv('test/X_test.csv', delimiter = ',')
+Y_test = pd.read_csv('test/Y_test.csv', delimiter = ',')
+y_preds = LogReg.predict(X_test)
+print(f'f1_score: {f1_score(Y_test, y_preds, average="micro")}')
